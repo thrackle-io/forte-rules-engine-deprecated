@@ -3,6 +3,7 @@ pragma solidity ^0.8.24;
 
 import "forge-std/Script.sol";
 import "src/example/application/ApplicationHandler.sol";
+import "script/clientScripts/DeployBase.s.sol";
 import {ApplicationAppManager} from "src/example/application/ApplicationAppManager.sol";
 
 /**
@@ -22,7 +23,7 @@ import {ApplicationAppManager} from "src/example/application/ApplicationAppManag
  * forge script script/clientScripts/Application_Deploy_08_UpgradeTesting.s.sol --ffi --rpc-url $RPC_URL --broadcast -vvvv
  */
 
-contract ApplicationDeployAppManagerAndAssetsScript is Script {
+contract ApplicationDeployAppManagerAndAssetsScript is Script, DeployBase {
     uint256 privateKey;
     address ownerAddress;
     uint256 appAdminKey;
@@ -42,6 +43,7 @@ contract ApplicationDeployAppManagerAndAssetsScript is Script {
         vm.stopBroadcast();
         vm.startBroadcast(appAdminKey);
         applicationAppManager.setNewApplicationHandlerAddress(address(applicationHandler));
+        setENVAddress("APPLICATION_APP_MANAGER", vm.toString(address(applicationAppManager)));
         vm.stopBroadcast();
     }
 }
